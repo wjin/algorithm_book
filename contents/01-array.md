@@ -69,6 +69,7 @@ Two pointers advance towards the same direction. Be careful about start index at
 **Code**
 
 ```cpp
+// O(n), O(1)
 class Solution
 {
 public:
