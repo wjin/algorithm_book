@@ -50,4 +50,40 @@ public:
     }
 };
 ```
+## Remove Duplicates from Sorted Array || (lc)
+
+**Description**
+
+Follow up for "Remove Duplicates":
+What if duplicates are allowed at most twice?
+
+For example,
+Given sorted array A = [1,1,1,2,2,3],
+
+Your function should return length = 5, and A is now [1,1,2,2,3].
+
+**Analysis**
+
+Two pointers advance towards the same direction. Be careful about start index at 2.
+
+**Code**
+
+```cpp
+class Solution
+{
+public:
+    int removeDuplicates(int A[], int n)
+    {
+        if (n <= 2) // n = 0 or 1
+            return n;
+
+        int i = 2, j = 2;
+        for (; j < n; j++)
+            if (A[i - 2] != A[j]) {
+                A[i++] = A[j];
+            }
+        return i;
+    }
+};
+```
 
