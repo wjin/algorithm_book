@@ -174,9 +174,9 @@ public:
         for (auto e : num)
             arr.insert(e);
 
-        // for each element in array, we only need to search hash table at most three times
-        // because we delete it from hash table after finding it
-        // so it is O(n)
+        // for each element in array, we only need to search hash table
+	    // at most three times because we delete it from hash table after
+		// finding it, so it is O(n)
         int maxLen = 0;
         int tmpLen = 0;
         for (auto e : num) {
@@ -206,7 +206,7 @@ public:
 ```
 
 Above solution needs to scan input array two times. For large input array or when dealing with
-input stream that we do not know when to stop input, it is not acceptable.
+input stream that we do not know when to stop input, it is unacceptable.
 
 We can maintain many spans in hash table. When get a new input, insert it to hash table and update
 or merge spans if possible. And also calculate a max length so far, when input finishes, we get
@@ -222,8 +222,8 @@ private:
     {
         int lower = low - m[low] + 1;
         int upper = high + m[high] - 1;
-
         int newLen = upper - lower + 1;
+
         m[lower] = newLen;
         m[upper] = newLen;
 
