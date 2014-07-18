@@ -8,6 +8,7 @@ Almost all of them are from other books or websites. Thus, each question is mark
 ---------|-------------------------------
    lc    |   leetcode
    cc    |   cracking the code interview
+   pp    |   programming pearls
    bp	 |   beauty of programming(chinese)
    jz    |   jianzhi offer(chinese)
 

@@ -134,7 +134,7 @@ public:
 };
 ```
 
-### find missing number in a large array
+### find missing number in a large array (pp)
 
 **Description**
 
@@ -163,7 +163,7 @@ T(n) = n + n/2 + n/4 + ... + 1 = O(n), n is the total numbers
 
 ## Hash
 
-### Longest Consecutive Sequence
+### Longest Consecutive Sequence (lc)
 
 **Description**
 

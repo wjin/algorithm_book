@@ -1,9 +1,10 @@
 # Introduction
 
 This book is used to collect common algorithm questions during IT interview.
+Feel free to contact me via: wjin.cn@gmail.com
 
 # Build
-It was written with markdown and converted to pdf by [pandoc](https://github.com/jgm/pandoc/releases).
+It is written with markdown and then converted to pdf by [pandoc](https://github.com/jgm/pandoc/releases).
 
 ## Mac OS X
  1. install [pandoc](https://github.com/jgm/pandoc/releases)
