@@ -134,6 +134,33 @@ public:
 };
 ```
 
+### find missing number in a large array
+
+**Description**
+
+Array A includes about 4 billions int numbers, find a missing one in it.
+
+**Analysis**
+
+If memory is large enough, traverse array once using bitmap to set corresponding bit (about 4G memory).
+Then use this **bit map** to find a bit that does not set.
+
+If memory is not enough, such as only a few hundred bytes available.
+Using binary search, each time partition input set to two small subsets, of course,
+at least there is one subset that misses a number. And then do the same operation on this sub set.
+
+For example:
+
+> first time: partition data according to bit 0
+
+> second time: partition data according to bit 1
+
+> third time: partition data according to bit 2
+
+> ...
+
+T(n) = n + n/2 + n/4 + ... + 1 = O(n), n is the total numbers
+
 ## Hash
 
 ### Longest Consecutive Sequence
