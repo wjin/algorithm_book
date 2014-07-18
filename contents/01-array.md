@@ -88,3 +88,248 @@ public:
 };
 ```
 
+## Two Sum (lc)
+
+**Description**
+
+Given an array of integers, find two numbers such that they add up to a specific target number.
+The function twoSum should return indices of the two numbers such that they add up to the target,
+where index1 must be less than index2. Please note that your returned answers (both index1 and
+index2) are not zero-based.
+
+You may assume that each input would have exactly one solution.
+
+Input: numbers={2, 7, 11, 15}, target=9
+Output: index1=1, index2=2
+
+**Analysis**
+
+Use hash to avoid OJ TLE error.
+
+**Code**
+
+```cpp
+// O(n), O(n)
+class Solution
+{
+public:
+    vector<int> twoSum(vector<int> &numbers, int target)
+    {
+        vector<int> ret;
+        unordered_map<int, int> hash;
+
+        for (int i = 0; i < numbers.size(); i++) {
+            hash[numbers[i]] = i; // store position
+        }
+
+        // traverse the original array, if it has duplicate numbers and those duplicate
+        // numbers' sum is target, it must have two duplicates as there exists a solution
+        // we keep the latter one's subscript in hash table.
+        for (int i = 0; i < numbers.size(); i++) { // original array
+            int key = target - numbers[i];
+            auto ite = hash.find(key);
+            if (ite != hash.end() && ite->second != i) {
+                ret.push_back(i + 1);
+                ret.push_back(ite->second + 1);
+                return ret;
+            }
+        }
+    }
+};
+```
+
+## 3sum (lc)
+
+**Description**
+
+Given an array S of n integers, are there elements a, b, c in S
+such that a + b + c = 0? Find all unique triplets in the array
+which gives the sum of zero.
+
+Note:
+
+Elements in a triplet (a,b,c) must be in non-descending order. (ie, a <= b <= c)
+The solution set must not contain duplicate triplets.
+For example, given array S = {-1 0 1 2 -1 -4},
+
+A solution set is:
+(-1, 0, 1)
+(-1, -1, 2)
+
+**Analysis**
+
+Sort plus Two pointers.
+
+**Code**
+
+```cpp
+// O(n^2), O(n)
+// considering: -n, -n+1, -n+2, ..., 0, 1, 2, ..., n, target is 0
+// total solutions is n
+class Solution
+{
+public:
+    vector<vector<int> > threeSum(vector<int> &num)
+    {
+        set<vector<int> > ret; //eliminate duplicate solution
+        int i = 0, len = num.size();
+
+        sort(num.begin(), num.end());
+        for (i = 0; i < len - 2; i++) {
+            // without this line, cannot pass new OJ system
+            if (i > 0 && num[i] == num[i - 1]) continue;
+
+            int start = i + 1, end = len - 1;
+            int sum = 0;
+            // two pointers move toward each other. O(n)
+            while (start < end) {
+                sum = num[i] + num[start] + num[end];
+                if (sum == 0) {
+                    vector<int> selection = { num[i], num[start], num[end] };
+                    ret.insert(selection);
+                    // continue find other combinations leading with num[i]
+					// such that sum == 0
+                    start++;
+                    end--;
+                } else if (sum < 0) {
+                    start++;
+                } else {
+                    end--;
+                }
+            }
+        }
+        return vector<vector<int>>(ret.begin(), ret.end());
+    }
+};
+```
+
+## 3Sum Closest (lc)
+
+**Description**
+
+Given an array S of n integers, find three integers in S such that the sum is
+closest to a given number, target. Return the sum of the three integers.
+You may assume that each input would have exactly one solution.
+
+For example, given array S = {-1 2 1 -4}, and target = 1.
+
+The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+
+**Analysis**
+
+Sort plus Two pointers.
+
+**Code**
+
+```cpp
+// O(n2), O(1)
+class Solution
+{
+public:
+    int threeSumClosest(vector<int> &num, int target)
+    {
+        int len = num.size();
+        if (len <= 2) //invalid
+            return -1;
+
+        sort(num.begin(), num.end());
+        // long long, otherwise, closestSum - target might be overflow
+        long long closestSum = INT_MAX;
+        int sum = 0;
+        int diff = 0;
+        int start = 0, end = 0;
+        for (int i = 0; i < len - 2; i++) {
+            start = i + 1, end = len - 1;
+            // two pointers move toward each other. O(n)
+            while (start < end) {
+                sum = num[i] + num[start] + num[end];
+                diff = sum - target;
+                if (abs(diff) < abs(closestSum - target)) {
+                    closestSum = sum;
+                }
+                if (diff < 0) {
+                    start++;
+                } else if (diff > 0) {
+                    end--;
+                } else {
+                    return closestSum;
+                }
+            }
+        }
+
+        return closestSum;
+    }
+};
+```
+
+
+## 4Sum (lc)
+
+**Description**
+
+Given an array S of n integers, are there elements a, b, c, and d in S
+such that a + b + c + d = target? Find all unique quadruplets in the array
+which gives the sum of target.
+
+Note:
+
+Elements in a quadruplet (a,b,c,d) must be in non-descending order.
+(ie, a <= b <= c <= d) The solution set must not contain duplicate
+quadruplets.
+
+For example, given array S = {1 0 -1 0 -2 2}, and target = 0.
+
+A solution set is:
+
+> (-1,  0, 0, 1)
+
+> (-2, -1, 1, 2)
+
+> (-2,  0, 0, 2)
+
+**Analysis**
+
+Sort plus Two pointers.
+
+**Code**
+
+```cpp
+// O(n^3), O(n)
+class Solution
+{
+public:
+    vector<vector<int> > fourSum(vector<int> &num, int target)
+    {
+        set<vector<int> > ret; //eliminate duplicate cases
+        int i, j, len = num.size();
+
+        sort(num.begin(), num.end());
+        for (i = 0; i < len - 3; i++) {
+            for (j = i + 1; j < len - 2; j++) {
+                int start = j + 1, end = len - 1;
+                int sum = 0;
+                // two pointers move toward each other. O(n)
+                while (start < end) {
+                    sum = num[i] + num[j] + num[start] + num[end];
+                    if (sum == target) {
+                        vector<int> selection = { num[i], num[j], num[start],
+                                                  num[end]
+                                                };
+                        ret.insert(selection);
+                        // continue find other combinations leading with num[i]
+						// such that sum == 0
+                        start++;
+                        end--;
+                    } else if (sum < target) {
+                        start++;
+                    } else {
+                        end--;
+                    }
+                }
+            }
+        }
+
+        return vector<vector<int>>(ret.begin(), ret.end());
+    }
+};
+```
