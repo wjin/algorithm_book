@@ -333,3 +333,37 @@ public:
     }
 };
 ```
+
+## Remove Element (lc)
+
+**Description**
+
+Given an array and a value, remove all instances of that value
+in place and return the new length.
+
+The order of elements can be changed.
+It doesn't matter what you leave beyond the new length.
+
+**Analysis**
+
+No.
+
+**Code**
+
+```cpp
+// O(n), O(1)
+class Solution
+{
+public:
+    int removeElement3(int A[], int n, int elem)
+    {
+        int idx = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (A[i] != elem) A[idx++] = A[i];
+        }
+
+        return idx;
+    }
+};
+```
