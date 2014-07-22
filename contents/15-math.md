@@ -131,3 +131,63 @@ public:
     }
 };
 ```
+
+## Fibonacci
+
+`F(n) = F(n-1) + F(n-2)`
+
+![fibonacci](./img/fibonacci.png)
+
+**Solutions**
+
+1. iteration (O(n))
+
+2. general term formula, may not be accurate as double decision (O(1))
+
+3. matrix (divide and conquer, O(logn))
+
+4. induction of definition (O(longn))
+
+
+### Climbing Stairs (lc)
+
+**Description**
+
+You are climbing a staircase. It takes n steps to reach to the top.
+Each time you can either climb 1 or 2 steps. In how many distinct ways
+can you climb to the top?
+
+
+**Code**
+
+```cpp
+class Solution
+{
+public:
+    // O(n), O(1)
+    int climbStairs(int n)
+    {
+        if (n == 1)
+            return 1; // bug
+        int s1 = 1, s2 = 2;
+        for (int i = 3; i <= n; i++) {
+            int t = s1 + s2;
+            s1 = s2;
+            s2 = t;
+        }
+
+        return s2;
+    }
+
+    // O(1), O(1)
+    int climbStairs2(int n)
+    {
+        if (n == 1)
+            return 1;
+
+        double root5 = sqrt(5);
+        return (1 / root5) * (pow((1 + root5) / 2, n + 1) -
+                    pow((1 - root5) / 2, n + 1)); // n + 1
+    }
+};
+```
