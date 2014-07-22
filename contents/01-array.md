@@ -595,3 +595,88 @@ public:
     }
 };
 ```
+
+## Rotate Image (lc)
+
+**Description**
+
+You are given an n x n 2D matrix representing an image.
+
+Rotate the image by 90 degrees (clockwise).
+
+Follow up: could you do this in-place?
+
+**Analysis**
+
+* swap elements around counter-diagonal
+
+* swap element around horizontal middle line
+
+**Code**
+
+```cpp
+// O(n^2), O(1)
+class Solution
+{
+public:
+    void rotate(vector<vector<int>> &matrix)
+    {
+        int len = matrix.size();
+        if (len <= 1) return;
+
+        // swap counter-diagonal
+        for (int i = 0; i < len; i++) {
+            for (int j = 0; j < len - i; j++) {
+                swap(matrix[i][j], matrix[len - 1 - j][len - 1 - i]);
+            }
+        }
+
+        // swap horizontal middle line
+        for (int i = 0; i < len / 2; i++) {
+            for (int j = 0; j < len; j++) {
+                swap(matrix[i][j], matrix[len - 1 - i][j]);
+            }
+        }
+    }
+};
+```
+
+## Plus One (lc)
+
+**Description**
+
+Given a non-negative number represented as an array of digits, plus one to the number.
+
+The digits are stored such that the most significant digit is at the head of the list.
+
+**Analysis**
+
+Be careful about the last `1`.
+
+**Code**
+
+```cpp
+// O(n), O(1)
+class Solution
+{
+public:
+    vector<int> plusOne(vector<int> &digits)
+    {
+        int n = digits.size() - 1;
+        int carry = 1;
+        int sum = 0;
+
+        while (n >= 0 && carry) {
+            sum = digits[n] + carry;
+            digits[n] = sum % 10;
+            carry = sum / 10;
+            n--;
+        }
+
+        if (carry)
+            digits.insert(digits.begin(), 1);
+
+        return digits;
+    }
+};
+```
