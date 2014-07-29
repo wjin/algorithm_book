@@ -1,6 +1,28 @@
-# Misc
+# Big Data
 
-## BitSet (pp)
+Considering big data problem, there are many ways to deal with them.
+
+**Time**
+
+* bit-map
+* bloom filter
+* hyperloglog
+* hash
+* heap
+* inverted index
+* trie
+* database index
+* hadoop, map/reduce
+
+**Space**
+
+* partition (hash/bucket)
+
+**Method**
+
+ * partition(hash) + counting(map/hash/trie) + sorting(heap/merge)
+
+## BitMap (pp)
 
 **Description**
 
@@ -24,6 +46,7 @@ private:
 public:
     BitSet(const int n = 10000)
     {
+        assert(n <= INT_MAX)
         bits = n;
         v.resize((bits >> shift) + 1, 0);
     }
@@ -48,3 +71,6 @@ public:
 };
 ```
 
+## Bloom Filter
+
+## Hyperloglog
