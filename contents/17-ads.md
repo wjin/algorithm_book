@@ -2,6 +2,10 @@
 
 ## Heap
 
+Heap is similar to priority_queue in C++ STL.
+
+### Implementation
+
 ```cpp
 // max heap
 class Heap
@@ -87,6 +91,113 @@ public:
     }
 };
 ```
+
+### Application
+
+#### Heap Sort
+
+```cpp
+class HeapSort
+{
+private:
+    Heap hp;
+
+public:
+    HeapSort(vector<int> &v) : hp(v)
+    {
+    }
+
+    vector<int> sort()
+    {
+        vector<int> ret;
+        while (hp.get_size()) {
+            ret.push_back(hp.pop_heap());
+        }
+        return ret;
+    }
+};
+```
+
+Or we can just sort it in place:
+
+```cpp
+class HeapSort
+{
+private:
+    void sift_down(vector<int> &v, int vs, int i)
+    {
+        int j = 2 * i; // j is the left child
+
+        while (j <= vs) { // loop until leaf
+            // find max child
+            if (j + 1 <= vs && v[j + 1] > v[j])
+                j += 1;
+
+            // swap if possible
+            if (v[i] < v[j]) {
+                swap(v[i], v[j]);
+                i = j;
+                j *= 2;
+            } else {
+                break;
+            }
+        }
+    }
+
+    void make_heap(vector<int> &v, int vs)
+    {
+        for (int i = vs / 2; i > 0; i--) {
+            sift_down(v, vs, i);
+        }
+    }
+
+public:
+    void Sort(vector<int> &v)
+    {
+        int vs = v.size();
+
+        // do not use v[0] to simplify sift_down operation
+        // as when parameter i is 0, cannot find left child using 2*i
+        v.insert(v.begin(), -1);
+
+        make_heap(v, vs);
+
+        while (vs > 1) {
+            swap(v[1], v[vs]);
+            vs--;
+            sift_down(v, vs, 1);
+        }
+
+        v.erase(v.begin());
+    }
+};
+```
+
+Core functions here are *sift_down* and *sift_up* operations.
+
+#### Find the median of a data flow at anytime （cc）
+
+Maintain two heaps: *small* heap and *big* heap respectively. All elements from small heap are smaller than those in big heap.
+
+And we use **max heap** to construct small heap(top is the max element) and **min heap** to construct big heap(top is the minimum element).
+
+When a new **element** comes, compare it with the top of two heaps(smallTop, bigTop).
+
+   * insert **element** to small heap if element < smallTop
+
+   * insert **element** to big heap if element > bigTop
+
+   * always make sure abs(smallSize - bigSize) <= 1.
+
+For simplicity, let smallSize >= bigSize, so at anytime, the median is either
+
+>   smallTop,  (smallSize > bigSize)
+
+or
+
+>   (smallTop + bigTop) / 2, (smallSize == bigSize)
+
+Note: there is a O(n) algorithm to find a median of a **given array**.
 
 ## Union Find Set
 
