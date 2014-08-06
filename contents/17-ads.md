@@ -746,6 +746,136 @@ public:
 
 ## Trie
 
+**Introduction**
+
+Trie, also called digital tree and sometimes radix tree or prefix tree is an **ordered** tree data structure that is used to store a dynamic set or associative array where the keys are usually strings.
+
+Unlike a binary search tree, no node in the tree stores the key associated with that node; instead, its position in the tree defines the key with which it is associated.
+
+All the descendants of a node have a common prefix of the string associated with that node, and the root is associated with the empty string.
+
+**Application**
+
+* word counting or eliminating dupicate
+
+* sorting
+
+* full text search
+
+**Extension**
+
+* Bitwise trie (dlmalloc)
+
+* Compressing trie
+
+**Code**
+
+```cpp
+class Trie
+{
+private:
+    struct TrieNode {
+        int cnt; // cnt != 0 means key ending with this node exists
+        vector<TrieNode *> next;
+        TrieNode(const int charSet = 26): cnt(0), next(charSet)
+        {
+        }
+    };
+
+    TrieNode root;
+
+    void destroy(TrieNode *t)
+    {
+        if (t) {
+            for (auto e : t->next) {
+                destroy(e);
+            }
+            delete t;
+        }
+    }
+
+    bool _insert(TrieNode *t, const char *key)
+    {
+        while (*key) {
+            int ch = *key - 'a';
+            if (!t->next[ch]) {
+                TrieNode *p = new TrieNode();
+                if (!p) return false; // no memory
+                t->next[ch] = p;
+            }
+            t = t->next[ch];
+            key++;
+        }
+        t->cnt++;
+        return true;
+    }
+
+    bool _remove(TrieNode *t, const char *key)
+    {
+        TrieNode *parent;
+        int ch;
+        while (*key) {
+            ch = *key - 'a';
+            if (!t->next[ch]) return false; // key does not exist
+
+            parent = t;
+            t = t->next[ch];
+            key++;
+        }
+
+        t->cnt--;
+        if (t->cnt == 0) {
+            for (auto e : t->next) {
+                if (e) return true;
+            }
+
+            // this node was not used by any other nodes
+            // delete it
+            delete t;
+            parent->next[ch] = nullptr;
+        }
+        return true;
+    }
+
+    bool _search(TrieNode *t, const char *key)
+    {
+        while (*key) {
+            int ch = *key - 'a';
+            if (!t->next[ch]) return false; // key does not exist
+
+            t = t->next[ch];
+            key++;
+        }
+        return !!t->cnt;
+    }
+
+public:
+    ~Trie()
+    {
+        for (auto t : root.next) {
+            if(t) destroy(t);
+        }
+    }
+
+    bool insert(const char *key)
+    {
+        if (key == nullptr || *key == '\0') return false;
+        return _insert(&root, key);
+    }
+
+    bool remove(const char *key)
+    {
+        if (key == nullptr || *key == '\0') return false;
+        return	_remove(&root, key);
+    }
+
+    bool search(const char *key)
+    {
+        if (key == nullptr || *key == '\0') return false;
+        return _search(&root, key);
+    }
+};
+```
 ## Suffix Array
 
 
