@@ -175,7 +175,7 @@ public:
 
 Core functions here are *sift_down* and *sift_up* operations.
 
-#### Find the median of a data flow at anytime （cc）
+#### Find the median of a data flow at anytime (cc)
 
 Maintain two heaps: *small* heap and *big* heap respectively. All elements from small heap are smaller than those in big heap.
 
