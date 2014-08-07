@@ -191,3 +191,143 @@ public:
     }
 };
 ```
+
+## Euclidean
+
+### Basic Euclidean Algorithm
+
+**Formula**
+
+> gcd(a, b) = gcd(b, a mod b)
+
+**Proof**
+
+Let a = kb + r, so r = a mod b
+
+1. let d = gcd(a, b)
+
+>	r = a - kb             (1)
+
+>	d is gcd(a, b) -> d|a, d|b   (2)
+
+>	(1), (2) -> d|r -> d is a common divisor of b and r.
+
+2. let d = gcd(b, r)
+
+>	d|b, d|r
+
+>	a = kb + r -> d|a, d is a common divisor of a and b.
+
+According to above inference, gcd(a, b) and gcd(b, a mod b) have the same common divisor, so they have the same greatest common divisor.
+
+Note: least common multiple
+
+> lcm(a, b) = a * b / gcd(a, b)
+
+```cpp
+// greatest common divisor
+class Solution
+{
+public:
+    int gcd_rec(int a, int b)
+    {
+        if (b == 0) return a;
+        return gcd_rec(b, a % b);
+    }
+
+    int gcd_ite(int a, int b)
+    {
+        int mod = 0;
+        while (b) {
+            mod = a % b;
+            a = b;
+            b = mod;
+        }
+
+        return a;
+    }
+
+    int gcd_ite2(int a, int b)
+    {
+        while (a != b) {
+            if (a > b) a -= b;
+            else b -= a;
+        }
+        return a;
+    }
+};
+```
+
+### Extension Euclidean algorithm
+
+> gcd(a, b) = ax + by
+
+We can get a pair coefficient (x, y) such that ax + by = gcd(a, b).
+
+**Proof**
+
+let gcd(a, b) = ax1 + by1
+
+gcd(b, a % b) = bx2 + (a % b)y2 = bx2 + (a - (a/b)*b)y2
+
+gcd(a, b) = gcd(b, a % b) -> ax1 + by1 = ay2 + b(x2 - a/b * y2)
+
+So the iteration equation is:
+
+> x1 = y2
+
+> y1 = x2 - a / b * y2
+
+```cpp
+class Solution
+{
+public:
+
+    int egcd(int a, int b, int &x, int &y)
+    {
+        if (b == 0) {
+            x = 1;
+            y = 0;
+            return a;
+        } else {
+            int gcd = egcd(b, a % b, x, y);
+            int x2 = x, y2 = y;
+            x = y2;
+            y = x2 - (a / b) * y2;
+            return gcd;
+        }
+    }
+
+    int egcd_ite(int a, int b, int &x, int &y)
+    {
+        int x0, y0, x1, y1;
+
+        x0 = 1;
+        y0 = 0;
+        x1 = 0;
+        y1 = 1;
+        x = 0;
+        y = 1;
+
+        int r = a % b; // remainder
+        int q = a / b; // quotient
+
+        while (r) {
+            x = x0 - q * x1;
+            y = y0 - q * y1;
+
+            x0 = x1;
+            y0 = y1;
+            x1 = x;
+            y1 = y;
+
+            a = b;
+            b = r;
+            r = a % b;
+            q = a / b;
+        }
+
+        return b; // b
+    }
+};
+```
