@@ -596,7 +596,7 @@ public:
 };
 ```
 
-## Rotate Image (lc)
+## Rotate Image (lc, cc)
 
 **Description**
 
@@ -639,6 +639,42 @@ public:
         }
     }
 };
+
+// O(n^2), O(1)
+class Solution2
+{
+public:
+    void rotate(vector<vector<int>> &matrix)
+    {
+        int len = matrix.size();
+        if (len <= 1) return;
+
+        // swap element layer by layer (circle by circle)
+        // from outside to inside
+        for (int layer = 0; layer < len / 2; layer++) {
+            int first = layer, last = len - 1 - layer;
+
+            // traverse row
+            for (int i = first; i < last; i++) {
+                int offset = i - first; // offset to the start
+
+                int top = matrix[first][i]; // store top element
+
+                // left to top
+                matrix[first][i] = matrix[last - offset][first];
+
+                // bottom to left
+                matrix[last - offset][first] = matrix[last][last - offset];
+
+                // right to bottom
+                matrix[last][last - offset] = matrix[i][last];
+
+                // top to right
+                matrix[i][last] = top;
+            }
+        }
+    }
+};
 ```
 
 ## Plus One (lc)
@@ -677,6 +713,100 @@ public:
             digits.insert(digits.begin(), 1);
 
         return digits;
+    }
+};
+```
+
+## set matrix sero (lc, cc)
+
+**Description**
+
+Set Matrix Zeroes
+
+Given a m x n matrix, if an element is 0, set its entire row and column to 0.
+
+Do it in place.
+
+**Analysis**
+
+Leverge first line and column to get O(1) space complexity.
+
+**Code**
+
+```cpp
+
+class Solution
+{
+public:
+    // O(n^2), O(n)
+    void setZeroes(vector<vector<int> > &matrix)
+    {
+        int row = matrix.size();
+        int col = matrix[0].size();
+
+        vector<bool> row_tag(row);
+        vector<bool> col_tag(col);
+
+        for (int i = 0; i < row; i++)
+            for (int j = 0; j < col; j++)
+                if (matrix[i][j] == 0) {
+                    row_tag[i] = true;
+                    col_tag[j] = true;
+                }
+
+        for (int i = 0; i < row; i++)
+            for (int j = 0; j < col; j++)
+                if (row_tag[i] || col_tag[j]) {
+                    matrix[i][j] = 0;
+                }
+    }
+    
+    // O(n^2), O(1)
+    // do it in place
+    void setZeroes2(vector<vector<int> > &matrix)
+    {
+        int row = matrix.size();
+        int col = matrix[0].size();
+
+        // first row and col tag
+        bool row0 = false, col0 = false;
+
+        // record first row 0
+        for (int j = 0; j < col && !row0; j++)
+            if (!matrix[0][j])
+                row0 = true;
+
+        // record first col 0
+        for (int i = 0; i < row && !col0; i++)
+            if (!matrix[i][0])
+                col0 = true;
+
+        // map 0 to first row and col
+        for (int i = 1; i < row; i++)
+            for (int j = 1; j < col; j++)
+                if (matrix[i][j] == 0) {
+                    matrix[0][j] = 0;
+                    matrix[i][0] = 0;
+                }
+
+        // set zero
+        for (int i = 1; i < row; i++)
+            for (int j = 1; j < col; j++)
+                if (!matrix[0][j] || !matrix[i][0]) {
+                    matrix[i][j] = 0;
+                }
+
+        // set first row
+        if (row0) {
+            for (int j = 0; j < col; j++)
+                matrix[0][j] = 0;
+        }
+
+        // set first col
+        if (col0) {
+            for (int i = 0; i < row; i++)
+                matrix[i][0] = 0;
+        }
     }
 };
 ```
